@@ -1,6 +1,7 @@
 backend/.env
 backend/node_modules/
 node_modules/
+frontendV2/frontend/node_modules/
 backend.zip
 *.zip
 *.log

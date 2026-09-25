@@ -3,7 +3,6 @@ require('dotenv').config();
 const express = require('express');
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
-const path = require('path');
 const connectDB = require('./config/db');
 const { generalLimiter } = require('./middleware/rateLimiter');
 const authRoutes = require('./routes/authRoutes');
@@ -16,12 +15,6 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 // Middleware 
-
-// Serve the static frontend from the same origin when deployed on Vercel.
-app.use(express.static(path.join(__dirname, '../frontendV2/frontend')));
-app.get('/', (_req, res) => {
-  res.sendFile(path.join(__dirname, '../frontendV2/frontend/auth.html'));
-});
 
 // Parse JSON 
 app.use(express.json());
