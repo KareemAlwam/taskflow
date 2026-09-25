@@ -166,11 +166,9 @@ app.use((err, _req, res, _next) => {
   });
 });
 
-if (require.main === module) {
-  connectDB().then(() => {
-    app.listen(PORT, () => {
-      console.log(`TaskFlow API running on port ${PORT}`);
-    });
+if (require.main === module || process.env.VERCEL) {
+  app.listen(PORT, () => {
+    console.log(`TaskFlow API running on port ${PORT}`);
   });
 }
 
