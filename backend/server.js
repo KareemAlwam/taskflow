@@ -3,6 +3,7 @@ require('dotenv').config();
 const express = require('express');
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
+const path = require('path');
 const connectDB = require('./config/db');
 const { generalLimiter } = require('./middleware/rateLimiter');
 const authRoutes = require('./routes/authRoutes');
@@ -15,6 +16,12 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 // Middleware 
+
+// Serve the static frontend from the same origin when deployed on Vercel.
+app.use(express.static(path.join(__dirname, '../frontendV2/frontend')));
+app.get('/', (_req, res) => {
+  res.sendFile(path.join(__dirname, '../frontendV2/frontend/auth.html'));
+});
 
 // Parse JSON 
 app.use(express.json());
@@ -58,9 +65,30 @@ app.use(
 // Apply rate limiting globally broad protection against DoS and scraping
 app.use(generalLimiter);
 
+// Connect lazily for API requests so static pages and health checks remain
+// available while deployment environment variables are being configured.
+app.use('/api', async (req, res, next) => {
+  if (req.path === '/health') {
+    next();
+    return;
+  }
+
+  try {
+    await connectDB();
+    next();
+  } catch (_error) {
+    res.status(503).json({
+      error: {
+        code: 'SERVICE_UNAVAILABLE',
+        message: 'The service is temporarily unavailable',
+      },
+    });
+  }
+});
+
 // Routes
 // Health check
-app.get('/health', (_req, res) => {
+app.get(['/health', '/api/health'], (_req, res) => {
   res.json({ status: 'ok' });
 });
 

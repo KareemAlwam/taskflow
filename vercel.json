@@ -1,21 +1,3 @@
 {
-  "version": 2,
-  "rewrites": [
-    {
-      "source": "/",
-      "destination": "/auth.html"
-    },
-    {
-      "source": "/:page(auth|home|project|task).html",
-      "destination": "/frontendV2/frontend/:page.html"
-    },
-    {
-      "source": "/css/:path*",
-      "destination": "/frontendV2/frontend/css/:path*"
-    },
-    {
-      "source": "/js/:path*",
-      "destination": "/frontendV2/frontend/js/:path*"
-    }
-  ]
+  "version": 2
 }
