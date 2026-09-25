@@ -278,6 +278,4 @@ export function showApiErrorToast(err) {
   });
 }
 
-// Backward-compatible export for any cached page modules during deployment.
-export function mountDemoInspectorBar() {}
 
