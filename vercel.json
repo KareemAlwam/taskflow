@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "outputDirectory": "frontendV2/frontend",
+  "rewrites": [
+    {
+      "source": "/",
+      "destination": "/auth.html"
+    }
+  ]
+}

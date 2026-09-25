@@ -145,14 +145,13 @@ app.use((err, _req, res, _next) => {
   });
 });
 
-// Starter 
-
-// Connect to MongoDB first, then start listening
-connectDB().then(() => {
-  app.listen(PORT, () => {
-    console.log(`TaskFlow API running on port ${PORT}`);
+if (require.main === module) {
+  connectDB().then(() => {
+    app.listen(PORT, () => {
+      console.log(`TaskFlow API running on port ${PORT}`);
+    });
   });
-});
+}
 
 // Export for testing (supertest can import the app without calling listen).
 module.exports = app;

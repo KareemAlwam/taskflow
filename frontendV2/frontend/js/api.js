@@ -36,13 +36,11 @@
 function resolveApiBaseUrl() {
   const { protocol, hostname, port } = window.location;
 
-  if (!port) {
-    return `${protocol}//${hostname}/api`;
+  if (port === '3000' || port === '8000') {
+    return `${protocol}//${hostname}:5000/api`;
   }
 
-  const normalizedPort = port === '3000' || port === '8000' ? '5000' : port;
-  const origin = `${protocol}//${hostname}:${normalizedPort}`;
-  return `${origin}/api`;
+  return `${protocol}//${hostname}${port ? `:${port}` : ''}/api`;
 }
 
 const API_BASE_URL = resolveApiBaseUrl();

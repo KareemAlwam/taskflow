@@ -2,16 +2,27 @@ const mongoose = require('mongoose');
 
 // Database Connection
  
-const connectDB = async () => {
-  try {
-    const conn = await mongoose.connect(process.env.MONGODB_URI);
+let connectionPromise;
 
-    console.log(`MongoDB connected: ${conn.connection.host}`);
-  } catch (err) {
-    console.error(`MongoDB connection error: ${err.message}`);
-    // Exit with failure code the app can't function without a DB.
-    process.exit(1);
+const connectDB = async () => {
+  if (mongoose.connection.readyState === 1) {
+    return mongoose.connection;
   }
+
+  if (!connectionPromise) {
+    connectionPromise = mongoose.connect(process.env.MONGODB_URI)
+      .then((conn) => {
+        console.log(`MongoDB connected: ${conn.connection.host}`);
+        return conn.connection;
+      })
+      .catch((err) => {
+        connectionPromise = null;
+        console.error(`MongoDB connection error: ${err.message}`);
+        throw err;
+      });
+  }
+
+  return connectionPromise;
 };
 
 // logs
